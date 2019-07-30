@@ -154,7 +154,9 @@ module BulkInsert
       if is_postgres && ignore
         ' ON CONFLICT DO NOTHING'
       elsif is_postgres && update_duplicates
+        
         update_values = @columns.map do |column|
+          next if column == 'created_at'
           "#{column.name}=EXCLUDED.#{column.name}"
         end.join(', ')
         ' ON CONFLICT(' + update_duplicates.join(', ') + ') DO UPDATE SET ' + update_values
